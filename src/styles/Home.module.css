@@ -1,0 +1,9 @@
+.defaultImage {
+    width: 70%;           
+    max-width: 1000px;     
+    max-height: 500;
+    border-radius: 8px;   
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+    display: block;
+    margin: 20px auto;    
+}

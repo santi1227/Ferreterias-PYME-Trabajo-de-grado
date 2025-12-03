@@ -1,0 +1,136 @@
+/* Overlay oscuro con blur futurista */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(6px);
+  animation: fadeIn 0.4s ease-out;
+}
+
+/* Contenedor principal */
+.content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 380px;
+  padding: 2rem;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #0f0f1a, #1a1a2e, #000000);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  transform: translate(-50%, -50%) scale(0.9);
+  animation: popup 0.4s ease forwards;
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.3),
+              0 0 50px rgba(255, 0, 255, 0.2);
+}
+
+/* Header con icono + título */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+
+.icon {
+  width: 40px;
+  height: 40px;
+  color: cyan;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.description {
+  font-size: 0.9rem;
+  color: #aaa;
+}
+
+/* Formulario */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.input {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0.7rem;
+  border-radius: 8px;
+  color: white;
+  font-size: 1rem;
+  outline: none;
+}
+
+.input:focus {
+  border-color: cyan;
+  box-shadow: 0 0 10px cyan;
+}
+
+.button {
+  background: linear-gradient(90deg, #ff00ff, #00ffff);
+  border: none;
+  border-radius: 8px;
+  padding: 0.8rem;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  color: white;
+}
+
+.button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px #ff00ff, 0 0 25px #00ffff;
+}
+
+/* Botón de cierre */
+.close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.close:hover {
+  color: white;
+}
+
+/* Animaciones */
+@keyframes popup {
+  to {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Trigger */
+.trigger {
+  background: linear-gradient(90deg, #00ffff, #ff00ff);
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.trigger:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px #00ffff, 0 0 25px #ff00ff;
+}

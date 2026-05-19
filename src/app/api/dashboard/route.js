@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import Purchase from "@/models/Purchase";
+import Sale from "@/models/Sale";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
@@ -20,11 +21,20 @@ export async function GET() {
         for (const { day, date } of last7Days) {
             const nextDay = new Date(date);
             nextDay.setDate(date.getDate() + 1);
+            const ventasDelDia = await Sale.aggregate([
+                { $match: { createdAt: { $gte: date, $lt: nextDay } } },
+                { $group: { _id: null, totalVentas: { $sum: "$total" } } },
+            ]);
+
             const comprasDelDia = await Purchase.aggregate([
                 { $match: { createdAt: { $gte: date, $lt: nextDay } } },
                 { $group: { _id: null, totalCompras: { $sum: "$total" } } },
             ]);
-            stats.push({ day, compras: comprasDelDia[0]?.totalCompras || 0 });
+            stats.push({
+                day,
+                compras: comprasDelDia[0]?.totalCompras || 0,
+                ventas: ventasDelDia[0]?.totalVentas || 0
+            });
         }
         let aiResponse = "Análisis no disponible";
         try {

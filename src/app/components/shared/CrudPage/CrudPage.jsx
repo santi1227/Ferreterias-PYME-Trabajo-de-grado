@@ -21,7 +21,7 @@ export default function CrudPage({
     columns,
     FormComponent
 }) {
-    
+
     const [openDialogDelete, setOpenDialogDelete] = useState(false);
     const [openDialogCreate, setOpenDialogCreate] = useState(false);
     const [formData, setFormData] = useState(() => ({ ...model }));
@@ -30,7 +30,7 @@ export default function CrudPage({
     const [pageSize, setPageSize] = useState(5);
     const [rowCount, setRowCount] = useState(0);
     const [data, setData] = useState([]);
-    const [page, setPage] = useState(0); 
+    const [page, setPage] = useState(0);
     // console.log("formData", formData);
 
     const handleChange = (e) => {
@@ -64,7 +64,7 @@ export default function CrudPage({
         try {
             const res = await fetch(`${apiEndpoint}/${code}`, { method: "GET" });
             const data = await res.json();
-            if (data && '_id' in data){
+            if (data && '_id' in data) {
                 setFormData({ ...model });
                 toast.error("El código ya existe");
             }
@@ -89,10 +89,10 @@ export default function CrudPage({
         };
         fetchData();
     }, [page, pageSize, apiEndpoint]);
-    
+
     const validateFormData = () => {
         for (const [key, value] of Object.entries(formData)) {
-            if (["created", "updatedAt", "createdAt","id", "_id"].includes(key)) continue;
+            if (["created", "updatedAt", "createdAt", "id", "_id"].includes(key)) continue;
             if (typeof value === "string" && value.trim() === "") {
                 toast.error(`Por favor completa el campo "${key}".`);
                 return false;
@@ -201,14 +201,24 @@ export default function CrudPage({
             <DataGrid
                 rows={data}
                 getRowId={(row) => row._id}
+
                 pagination
-                rowCount={rowCount}
-                page={page}
-                pageSize={pageSize}
                 paginationMode="server"
-                onPageChange={(newPage) => setPage(newPage)}
-                onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-                rowsPerPageOptions={[5, 10, 20]}
+
+                rowCount={rowCount}
+
+                paginationModel={{
+                    page,
+                    pageSize,
+                }}
+
+                onPaginationModelChange={(model) => {
+                    setPage(model.page);
+                    setPageSize(model.pageSize);
+                }}
+
+                pageSizeOptions={[5, 10, 20]}
+
                 loading={loading}
                 columns={columns({
                     onEdit: (row) => { setFormData(row); setOpenDialogEdit(true); },
@@ -230,7 +240,7 @@ export default function CrudPage({
                     confirmText="Eliminar"
                     cancelText="Cancelar"
                     onConfirm={handleDelete}
-                    onCancel={() => {setOpenDialogDelete(false); setFormData({ ...model });}}
+                    onCancel={() => { setOpenDialogDelete(false); setFormData({ ...model }); }}
                 />
             )}
 
@@ -240,9 +250,9 @@ export default function CrudPage({
                     widthDialog="sm"
                     title={openDialogEdit ? "Editar" : "Crear"}
                     content={
-                        <FormComponent 
-                            formData={formData} 
-                            handleChange={handleChange} 
+                        <FormComponent
+                            formData={formData}
+                            handleChange={handleChange}
                             handleBlur={handleBlur}
                             handleDirectChange={handleDirectChange}
                             isEdit={openDialogEdit}

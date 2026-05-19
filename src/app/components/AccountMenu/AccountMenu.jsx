@@ -61,8 +61,8 @@ export default function AccountMenu() {
                         aria-expanded={open ? 'true' : undefined}
                     >
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                            <MdSupervisedUserCircle size={30} />
-                            <span>{user.userName}</span>
+                            <MdSupervisedUserCircle color='white' size={40} />
+                            <span style={{ color: "white" }}>{user.userName}</span>
                         </Box>
                     </IconButton>
                 </Stack>

@@ -14,6 +14,8 @@ import ToasterGeneric from "@/app/components/others/ToasterGeneric";
 import LoadingOverlay from "@/app/components/others/LoadingOverlay";
 import { Dialog } from "@/app/components/others/Dialog";
 
+
+
 export default function CrudPage({
     title,
     apiEndpoint,
@@ -187,13 +189,10 @@ export default function CrudPage({
                 <CardContent>
                     <Box display="flex" alignItems="center" justifyContent="space-between">
                         <Typography variant="h3">{title}</Typography>
-                        <IconButton
-                            color="success"
-                            onClick={() => setOpenDialogCreate(true)}
-                            sx={{ mt: 2 }}
-                        >
-                            <IoMdAddCircle size={30} />
-                        </IconButton>
+
+                        <Button onClick={() => setOpenDialogCreate(true)} color="success" variant="contained" startIcon={<IoMdAddCircle size={30} />}>
+                            Crear registro
+                        </Button>
                     </Box>
                 </CardContent>
             </Card>

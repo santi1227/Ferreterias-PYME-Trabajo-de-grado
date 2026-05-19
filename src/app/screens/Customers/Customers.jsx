@@ -26,6 +26,29 @@ const columns = ({ onEdit, onDelete }) => [
     { field: "documentType", headerName: "Tipo Doc", width: 150 },
     { field: "documentNumber", headerName: "Número Doc", width: 150 },
     {
+        field: "address", headerName: "Dirección", flex: 1, valueGetter: (params) => {
+            const addr = params || {};
+            return `${addr.street || ""} ${addr.city || ""} ${addr.state || ""} ${addr.country || ""} ${addr.postalCode || ""}`.trim() || "Sin dirección";
+        }
+    },
+    {
+        field: "createdAt",
+        headerName: "Fecha de Registro",
+        flex: 1,
+        valueGetter: (params) => {
+            return new Date(params).toLocaleString("es-CO", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+                hour12: true,
+            });
+        },
+    },
+
+    {
         field: "actions",
         headerName: "Acciones",
         width: 180,

@@ -12,12 +12,21 @@ const model = {
 
 const columns = ({ onEdit, onDelete }) => [
     { field: "invoiceNumber", headerName: "Factura", width: 150 },
-     {
+    {
         field: "provider",
         headerName: "Proveedor",
         flex: 1,
         valueGetter: (params) => params?.name || "Sin proveedor"
     },
+    {
+        field: "products", headerName: "Productos", flex: 1,
+        valueGetter: (params) => {
+            if (!params || !Array.isArray(params)) return "Sin productos";
+            return params.map(p => p.product?.name || "Producto desconocido").join(", ");
+
+        }
+    },
+
     { field: "total", headerName: "Total", width: 150 },
     {
         field: "createdAt",

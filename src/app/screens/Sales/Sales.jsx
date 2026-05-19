@@ -17,7 +17,14 @@ const columns = ({ onEdit, onDelete }) => [
         field: "customer",
         headerName: "Cliente",
         flex: 1,
-        valueGetter: (params) => params?.name || "Sin cliente",
+        valueGetter: (params) =>
+            `${params?.firstName || ""} ${params?.lastName || ""}`.trim() || "Sin cliente",
+    },
+    {
+        field: "products", headerName: "Productos", flex: 1, valueGetter: (params) => {
+            if (!params || !Array.isArray(params)) return "Sin productos";
+            return params.map(p => p.product?.name || "Producto desconocido").join(", ");
+        }
     },
 
     { field: "total", headerName: "Total", width: 150 },

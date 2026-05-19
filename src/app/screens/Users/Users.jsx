@@ -9,6 +9,7 @@ const modelUser = {
     phone: "",
     rol: "empleado",
     state: 1,
+    createdAt: "",
 };
 
 const columns = ({ onEdit, onDelete }) => [
@@ -21,6 +22,22 @@ const columns = ({ onEdit, onDelete }) => [
         headerName: "Estado",
         width: 120,
         renderCell: (params) => (params.row.state === 1 ? "Activo" : "Inactivo"),
+    },
+    {
+        field: "createdAt",
+        headerName: "Fecha de Registro",
+        flex: 1,
+        valueGetter: (params) => {
+            return new Date(params).toLocaleString("es-CO", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+                hour12: true,
+            });
+        },
     },
     {
         field: "actions",
@@ -44,7 +61,7 @@ const columns = ({ onEdit, onDelete }) => [
 ];
 
 export default function Users() {
-    console.log("modelUser", modelUser) 
+    console.log("modelUser", modelUser)
     return (
         <CrudPage
             title="Gestión de Usuarios"

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import Sale from "@/models/Sale";
 import Product from "@/models/Product";
+import Customer from "@/models/Customer";
 
 export async function GET(req) {
     try {

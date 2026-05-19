@@ -54,10 +54,13 @@ export async function POST(req) {
         for (const item of data.products) {
             const product = await Product.findById(item.product);
 
+            const quantity = Number(item.quantity);
+            const price = Number(item.price);
+
             if (product) {
-                product.stock += item.quantity;
-                if (item.price > product.purchasePrice) {
-                    product.purchasePrice = item.price;
+                product.stock = Number(product.stock) + quantity;
+                if (price > product.purchasePrice) {
+                    product.purchasePrice = price;
                 }
 
                 await product.save();

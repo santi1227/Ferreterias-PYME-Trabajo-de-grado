@@ -26,6 +26,19 @@ const columns = ({ onEdit, onDelete }) => [
 
         }
     },
+    {
+        field: "quantity",
+        headerName: "Cantidad",
+        flex: 1,
+        renderCell: (params) => {
+            const products = params?.row?.products;
+
+            if (!Array.isArray(products)) return 0;
+
+            return products.reduce((sum, item) => sum + (item.quantity || 0), 0);
+        }
+    },
+
 
     { field: "total", headerName: "Total", width: 150 },
     {

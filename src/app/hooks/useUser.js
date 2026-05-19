@@ -1,17 +1,37 @@
 "use client";
+
 import { useEffect, useState } from "react";
- 
+
 export default function useUser() {
     const [user, setUser] = useState(null);
+
     useEffect(() => {
-        fetch("/api/auth/getUserCookie")
-            .then((res) => res.json())
-            .then((data) => {
+        const getUser = async () => {
+            try {
+                const res = await fetch("/api/auth/getUserCookie");
+
+                // Token expirado o inválido
+                if (res.status === 401) {
+                    document.cookie = "token=; Max-Age=0; path=/";
+                    window.location.href = "/login";
+                    return;
+                }
+
+                const data = await res.json();
+
                 if (data.userName) {
-                    setUser(data)
-                } else { setUser(null) };
-            })
-            .catch(() => setUser(null));
+                    setUser(data);
+                } else {
+                    setUser(null);
+                }
+            } catch (error) {
+                setUser(null);
+                window.location.href = "/login";
+            }
+        };
+
+        getUser();
     }, []);
+
     return user;
 }

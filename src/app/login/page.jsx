@@ -1,4 +1,6 @@
+
 "use client";
+
 import React, { useState } from "react";
 import {
     Box,
@@ -13,28 +15,34 @@ import {
     Typography,
     InputAdornment,
     IconButton,
+    Divider,
 } from "@mui/material";
+
 import { styled } from "@mui/material/styles";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
-// Card con estilos personalizados
+import { MdInventory2 } from "react-icons/md";
+
 const Card = styled(MuiCard)(({ theme }) => ({
     display: "flex",
     flexDirection: "column",
     alignSelf: "center",
     width: "100%",
-    padding: theme.spacing(4),
-    gap: theme.spacing(2),
-    boxShadow:
-        "hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px",
-    [theme.breakpoints.up("sm")]: {
-        width: "450px",
-    },
+    maxWidth: "450px",
+    padding: theme.spacing(5),
+    borderRadius: "24px",
+    backdropFilter: "blur(12px)",
+    background: "rgba(255,255,255,0.08)",
+    border: "1px solid rgba(255,255,255,0.12)",
+    boxShadow: "0 8px 32px rgba(0,0,0,0.35)",
+    gap: theme.spacing(3),
 }));
 
 export default function LoginCard() {
     const router = useRouter();
+
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
@@ -44,6 +52,7 @@ export default function LoginCard() {
 
     async function handleSubmit(e) {
         e.preventDefault();
+
         setLoadingLogin(true);
 
         if (!username || !password) {
@@ -55,8 +64,13 @@ export default function LoginCard() {
         try {
             const res = await fetch("/api/auth/login", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ username, password }),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    username,
+                    password,
+                }),
             });
 
             const data = await res.json();
@@ -67,10 +81,11 @@ export default function LoginCard() {
                 return;
             }
 
-            toast.success("Login exitoso ✅");
+            toast.success("Bienvenido 🚀");
             router.push("/dashboard");
+
         } catch (err) {
-            toast.error("Error de conexión con el servidor ⚡");
+            toast.error("Error de conexión ⚡");
         } finally {
             setLoadingLogin(false);
         }
@@ -79,71 +94,179 @@ export default function LoginCard() {
     return (
         <Box
             sx={{
+                minHeight: "100vh",
+                width: "100%",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                minHeight: "100vh",
-                background: "linear-gradient(135deg, #0a0f2c, #1a237e)",
+                position: "relative",
+                overflow: "hidden",
+
+                background: `
+            radial-gradient(circle at top left, rgba(34,197,94,0.25), transparent 25%),
+            radial-gradient(circle at bottom right, rgba(59,130,246,0.25), transparent 25%),
+            linear-gradient(135deg, #020617 0%, #0f172a 40%, #111827 100%)
+        `,
             }}
         >
-            <Card variant="outlined">
-                <Typography
-                    component="h1"
-                    variant="h4"
-                    sx={{ width: "100%", fontSize: "clamp(2rem, 10vw, 2.15rem)" }}
-                >
-                    Sign in
-                </Typography>
+            {/* Glow Effect 1 */}
+            <Box
+                sx={{
+                    position: "absolute",
+                    width: 300,
+                    height: 300,
+                    borderRadius: "50%",
+                    background: "rgba(34,197,94,0.18)",
+                    filter: "blur(120px)",
+                    top: -100,
+                    left: -100,
+                }}
+            />
 
+            {/* Glow Effect 2 */}
+            <Box
+                sx={{
+                    position: "absolute",
+                    width: 350,
+                    height: 350,
+                    borderRadius: "50%",
+                    background: "rgba(59,130,246,0.18)",
+                    filter: "blur(120px)",
+                    bottom: -120,
+                    right: -120,
+                }}
+            />
+            <Card>
+
+                {/* Logo */}
+                <Box
+                    sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        gap: 1,
+                    }}
+                >
+                    <Box
+                        sx={{
+                            width: 80,
+                            height: 80,
+                            borderRadius: "50%",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            background:
+                                "linear-gradient(135deg, #22c55e, #16a34a)",
+                            boxShadow: "0 8px 25px rgba(34,197,94,0.4)",
+                        }}
+                    >
+                        <MdInventory2 size={40} color="white" />
+                    </Box>
+
+                    <Typography
+                        variant="h4"
+                        sx={{
+                            color: "white",
+                            fontWeight: "bold",
+                            mt: 1,
+                        }}
+                    >
+                        Ferretería Inventario
+                    </Typography>
+
+                    <Typography
+                        variant="body2"
+                        sx={{
+                            color: "rgba(255,255,255,0.7)",
+                            textAlign: "center",
+                        }}
+                    >
+                        Sistema de gestión para ferreterías PYME
+                    </Typography>
+                </Box>
+
+                <Divider sx={{ borderColor: "rgba(255,255,255,0.1)" }} />
+
+                {/* Formulario */}
                 <Box
                     component="form"
                     onSubmit={handleSubmit}
-                    noValidate
-                    sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+                    sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 3,
+                    }}
                 >
                     <FormControl>
-                        <FormLabel htmlFor="username">Usuario</FormLabel>
+                        <FormLabel
+                            htmlFor="username"
+                            sx={{ color: "rgba(255,255,255,0.8)", mb: 1 }}
+                        >
+                            Usuario
+                        </FormLabel>
+
                         <TextField
                             id="username"
-                            name="username"
-                            placeholder="Tu usuario"
+                            placeholder="Ingresa tu usuario"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
-                            autoFocus
-                            required
                             fullWidth
+                            autoFocus
                             variant="outlined"
+                            sx={{
+                                "& .MuiOutlinedInput-root": {
+                                    borderRadius: "14px",
+                                    color: "white",
+                                    background: "rgba(255,255,255,0.05)",
+                                },
+                            }}
                         />
                     </FormControl>
 
                     <FormControl>
-                        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                            <FormLabel htmlFor="password">Password</FormLabel>
-                            <Link
-                                component="button"
-                                type="button"
-                                variant="body2"
-                                sx={{ alignSelf: "baseline" }}
-                                onClick={() => alert("Forgot password flow")}
+                        <Box
+                            sx={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                mb: 1,
+                            }}
+                        >
+                            <FormLabel
+                                htmlFor="password"
+                                sx={{ color: "rgba(255,255,255,0.8)" }}
                             >
-                                Forgot your password?
-                            </Link>
+                                Contraseña
+                            </FormLabel>
+
+
                         </Box>
+
                         <TextField
-                            name="password"
-                            placeholder="••••••"
-                            type={showPassword ? "text" : "password"}
                             id="password"
+                            type={showPassword ? "text" : "password"}
+                            placeholder="••••••••"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            required
                             fullWidth
                             variant="outlined"
+                            sx={{
+                                "& .MuiOutlinedInput-root": {
+                                    borderRadius: "14px",
+                                    color: "white",
+                                    background: "rgba(255,255,255,0.05)",
+                                },
+                            }}
                             InputProps={{
                                 endAdornment: (
                                     <InputAdornment position="end">
-                                        <IconButton onClick={handleTogglePassword} edge="end">
-                                            {showPassword ? <IoEyeOffOutline /> : <IoEyeOutline />}
+                                        <IconButton
+                                            onClick={handleTogglePassword}
+                                        >
+                                            {showPassword ? (
+                                                <IoEyeOffOutline color="white" />
+                                            ) : (
+                                                <IoEyeOutline color="white" />
+                                            )}
                                         </IconButton>
                                     </InputAdornment>
                                 ),
@@ -152,8 +275,22 @@ export default function LoginCard() {
                     </FormControl>
 
                     <FormControlLabel
-                        control={<Checkbox value="remember" color="primary" />}
-                        label="Remember me"
+                        control={
+                            <Checkbox
+                                sx={{
+                                    color: "rgba(255,255,255,0.7)",
+                                }}
+                            />
+                        }
+                        label={
+                            <Typography
+                                sx={{
+                                    color: "rgba(255,255,255,0.8)",
+                                }}
+                            >
+                                Recordarme
+                            </Typography>
+                        }
                     />
 
                     <Button
@@ -161,19 +298,29 @@ export default function LoginCard() {
                         fullWidth
                         variant="contained"
                         disabled={loadingLogin}
-                        sx={{ py: 1.2, fontWeight: "bold" }}
+                        sx={{
+                            py: 1.5,
+                            borderRadius: "14px",
+                            fontWeight: "bold",
+                            fontSize: "1rem",
+                            textTransform: "none",
+                            background:
+                                "linear-gradient(135deg, #22c55e, #16a34a)",
+                            boxShadow:
+                                "0 8px 20px rgba(34,197,94,0.35)",
+                            "&:hover": {
+                                background:
+                                    "linear-gradient(135deg, #16a34a, #15803d)",
+                            },
+                        }}
                     >
-                        {loadingLogin ? "Iniciando..." : "Sign in"}
+                        {loadingLogin ? "Ingresando..." : "Iniciar Sesión"}
                     </Button>
 
-                    <Typography sx={{ textAlign: "center" }}>
-                        Don’t have an account?{" "}
-                        <Link href="/signup" variant="body2">
-                            Sign up
-                        </Link>
-                    </Typography>
+
                 </Box>
             </Card>
-        </Box>
+        </Box >
     );
 }
+

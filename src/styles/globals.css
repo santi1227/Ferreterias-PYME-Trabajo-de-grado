@@ -1,7 +1,22 @@
-.root{
+.root {
     display: "flex";
     justify-content: "center";
     align-items: "center";
     min-height: "100vh";
     background: "linear-gradient(135deg, #0a0f2c, #1a237e)";
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100%;
+    overflow-x: hidden;
+    font-family: sans-serif;
+
+}
+
+* {
+    box-sizing: border-box;
 }

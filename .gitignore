@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Documentación de pruebas
+ESTRUCTURA_PRUEBAS.md
+REPORTE_PRUEBAS.md
+RESUMEN_PRUEBAS.md

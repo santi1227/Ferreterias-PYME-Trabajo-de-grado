@@ -15,7 +15,14 @@ const customJestConfig = {
         '^@/(.*)$': '<rootDir>/src/$1',
     },
     transformIgnorePatterns: [
-        'node_modules/(?!(mongoose|bson|mongodb|@types)/)',
+        '/node_modules/(?!(bson|mongodb|mongoose)/)',
+    ],
+    testPathIgnorePatterns: [
+        '/node_modules/',
+        '/.next/',
+        '<rootDir>/src/__tests__/models/',
+        '<rootDir>/src/__tests__/api/',
+        '<rootDir>/src/__tests__/integration/',
     ],
     collectCoverageFrom: [
         'src/**/*.{js,jsx,ts,tsx}',

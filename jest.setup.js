@@ -1,6 +1,24 @@
 import '@testing-library/jest-dom'
 
-// Mock Request and NextResponse for API tests
+// Mock Response for Next.js API routes
+global.Response = class Response {
+  constructor(body, init = {}) {
+    this.body = body
+    this.status = init.status || 200
+    this.headers = init.headers || {}
+    this.ok = this.status >= 200 && this.status < 300
+  }
+
+  async json() {
+    return typeof this.body === 'string' ? JSON.parse(this.body) : this.body
+  }
+
+  async text() {
+    return this.body
+  }
+}
+
+// Mock Request for Next.js API routes
 global.Request = class Request {
   constructor(url, options = {}) {
     this.url = url
@@ -33,6 +51,7 @@ global.Request = class Request {
   }
 }
 
+// Mock NextResponse
 global.NextResponse = {
   json: (data, init = {}) => ({
     json: async () => data,
@@ -40,13 +59,53 @@ global.NextResponse = {
     headers: init.headers || {},
     cookies: {
       set: jest.fn(),
+      get: jest.fn(),
+      delete: jest.fn(),
     },
   }),
   error: (error, init = {}) => ({
     json: async () => ({ error }),
     status: init.status || 500,
   }),
+  redirect: (url) => ({
+    status: 307,
+    headers: { Location: url },
+  }),
 }
+
+// Mock Mongoose and related libraries
+jest.mock('mongoose', () => {
+  const mockModel = jest.fn()
+  mockModel.findOne = jest.fn()
+  mockModel.find = jest.fn()
+  mockModel.findById = jest.fn()
+  mockModel.findByIdAndUpdate = jest.fn()
+  mockModel.findByIdAndDelete = jest.fn()
+  mockModel.create = jest.fn()
+  mockModel.countDocuments = jest.fn()
+  mockModel.save = jest.fn()
+
+  const SchemaConstructor = jest.fn((schema) => schema)
+  SchemaConstructor.Types = {
+    ObjectId: jest.fn(),
+    String: String,
+    Number: Number,
+    Date: Date,
+    Boolean: Boolean,
+    Array: Array,
+  }
+
+  return {
+    Schema: SchemaConstructor,
+    model: jest.fn(() => mockModel),
+    connect: jest.fn().mockResolvedValue({}),
+    disconnect: jest.fn().mockResolvedValue({}),
+    models: {},
+    connection: {
+      getClient: jest.fn(),
+    },
+  }
+})
 
 // Mock next/navigation
 jest.mock('next/navigation', () => ({
@@ -94,10 +153,25 @@ Object.defineProperty(window, 'matchMedia', {
   })),
 })
 
-// Suppress console errors in tests
-global.console = {
-  ...console,
-  error: jest.fn(),
-  warn: jest.fn(),
-}
+// Suppress Not Implemented errors from JSDOM
+const originalError = console.error
+beforeAll(() => {
+  console.error = (...args) => {
+    if (
+      typeof args[0] === 'string' &&
+      (args[0].includes('Not implemented') ||
+        args[0].includes('Warning: ReactDOM.render') ||
+        args[0].includes('navigation'))
+    ) {
+      return
+    }
+    originalError.call(console, ...args)
+  }
+})
+
+afterAll(() => {
+  console.error = originalError
+})
+
+
 

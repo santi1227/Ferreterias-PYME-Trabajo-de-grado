@@ -1,4 +1,5 @@
-// FormUser.jsx
+"use client";
+
 import React, { useEffect } from "react";
 import useUser from '@/app/hooks/useUser';
 // import { cookies } from "next/headers";
